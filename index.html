@@ -519,18 +519,98 @@ footer {
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
+/* ── HAMBURGER (hidden on desktop) ── */
+.hamburger { display: none; }
+.mobile-menu { display: none; }
+
 /* ── MOBILE ── */
 @media (max-width: 768px) {
+
   nav { padding: 1rem 5vw; }
   nav ul { display: none; }
+
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 1.5px;
+    background: var(--ink);
+    transition: all 0.3s;
+  }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: var(--ivory);
+    z-index: 200;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .mobile-menu a:hover { color: var(--amber); }
+  .mobile-close {
+    position: absolute;
+    top: 1.2rem;
+    right: 5vw;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--ink);
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  #hero { padding: 80px 5vw 3rem; min-height: auto; }
+  .hero-bg-text { display: none; }
+  .hero-title { font-size: clamp(2.8rem, 14vw, 5rem); margin-bottom: 1.5rem; }
+  .hero-row { flex-direction: column; gap: 1.5rem; }
+  .hero-stats { flex-wrap: nowrap; gap: 0; }
+  .stat { padding: 0 1.2rem; }
+  .stat:first-child { padding-left: 0; }
+  .stat-num { font-size: 1.5rem; }
+  .hero-desc { font-size: 0.88rem; margin-top: 1.2rem; max-width: 100%; }
+  .hero-cta { margin-top: 1.5rem; padding: 0.9rem 2rem; }
+
   #about { grid-template-columns: 1fr; }
-  .about-right { border-left: none; border-top: 1px solid var(--rule); }
+  .about-left { padding: 4rem 5vw; }
+  .about-right { border-left: none; border-top: 1px solid var(--rule); padding: 3rem 5vw; }
+
+  #menu { padding: 4rem 5vw; }
+  .menu-top { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+  .menu-tabs { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 0.5rem; width: 100%; }
+  .tab-btn { white-space: nowrap; padding: 0.6rem 0.8rem; font-size: 0.6rem; }
   .menu-grid { columns: 1; }
-  .exp-inner { grid-template-columns: 1fr; gap: 3rem; }
-  .footer-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-  .menu-top { flex-direction: column; align-items: flex-start; }
-  .hero-row { flex-direction: column; gap: 2rem; }
-  .hero-stats { flex-wrap: wrap; }
+  .menu-item-name { font-size: 0.95rem; }
+
+  #experience { padding: 4rem 5vw; }
+  .exp-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .exp-grid { grid-template-columns: 1fr; gap: 1px; }
+
+  #reserve { padding: 4rem 5vw; }
+  .reserve-btns { flex-direction: column; align-items: center; }
+  .res-btn { min-width: unset; width: 100%; max-width: 300px; }
+  .reserve-phone { font-size: 1.4rem; }
+
+  footer { padding: 3rem 5vw 2rem; }
+  .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-logo { font-size: 1.3rem; }
 }
 </style>
 </head>
@@ -546,7 +626,20 @@ footer {
     <li><a href="https://www.google.com/maps/search/?api=1&query=Kwality+Restaurant+7+Regal+Building+Sansad+Marg+Connaught+Place+New+Delhi" target="_blank">Directions</a></li>
     <li><a href="#reserve" class="nav-reserve">Reserve</a></li>
   </ul>
+  <button class="hamburger" onclick="openMenu()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="closeMenu()">×</button>
+  <a href="#about" onclick="closeMenu()">About</a>
+  <a href="#menu" onclick="closeMenu()">Menu</a>
+  <a href="#experience" onclick="closeMenu()">Experience</a>
+  <a href="https://www.google.com/maps/search/?api=1&query=Kwality+Restaurant+7+Regal+Building+Sansad+Marg+Connaught+Place+New+Delhi" target="_blank" onclick="closeMenu()">Directions</a>
+  <a href="#reserve" onclick="closeMenu()">Reserve</a>
+</div>
 
 <!-- HERO -->
 <section id="hero">
@@ -869,6 +962,15 @@ footer {
 </footer>
 
 <script>
+  function openMenu() {
+    document.getElementById('mobileMenu').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
   function switchTab(id, btn) {
     document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
